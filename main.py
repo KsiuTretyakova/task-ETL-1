@@ -153,6 +153,72 @@ else:
     print("\n--- haven`t name ---")
 
 
+# 3. Створення нових колонок (Feature Engineering)
 
-    
-print(df.head())
+df["full_name"] = df.first_name + " " + df.last_name
+
+df["city_length"] = df["city"].apply(len)
+
+# df["city2"] = df["city"].str.len()
+
+# df["is_gmail"] = 
+# print([bool(s) for s in df["email"] if "@gmail.com" in str(s).lower()])
+
+df["is_gmail"] = [True if "@gmail.com" in str(s).lower() else False for s in df["email"]]
+
+# possible_email_cols = [c for c in df.columns if "email" in c.lower()]
+
+
+# 4. Фільтрація даних
+
+print("\n--- підвибірки ---")
+
+# користувачі з доменом gmail.com
+gmail_users = df.loc[df['is_gmail'] == True].copy()
+# print(gmail_users)
+
+print("Gmail users:", len(gmail_users))
+
+# працівники компаній з “LLC” або “Ltd”
+
+# df["company_name"]
+
+df["company_name"] = df["company_name"].fillna("")
+# print(df["company_name"].fillna(""))
+
+mask_LLC_Ltd = df.company_name.str.contains(r"\b(LLC|Ltd|llc|LTD|ltd)\b", regex=True, na=False)
+# print(mask_LLC_Ltd)
+
+company_llc_ltd = df.loc[mask_LLC_Ltd].copy()
+# print(company_llc_ltd)
+
+print("Company LLC and Ltd:", len(company_llc_ltd))
+
+
+# 5. Позиційна вибірка (iloc)
+
+# iloc[row, col]
+
+try:
+    first_10_cols_2_5 = df.iloc[:10, 2:6]
+    print("\nПерші 10 рядків + колонки 2–5")
+    print(first_10_cols_2_5)
+except Exception as e:
+    print("Can`t (Перші 10 рядків + колонки 2–5):", e)
+
+
+every_10th = df.iloc[::10, :].copy()
+print("\nevery_10th")
+print(every_10th)
+
+
+random_5 = df.sample(5, random_state=42)
+print("\nrandom 5 row")
+print(random_5)
+
+
+# 6. Групування та статистика
+
+
+
+# print(df.head())
